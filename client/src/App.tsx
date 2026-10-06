@@ -94,6 +94,12 @@ export default function App() {
         <Header />
         <h1>Thank you!</h1>
         <p>Your response has been recorded.</p>
+        <div className="assurance" role="note">
+          <p>
+            <strong>Your data is safe.</strong> Your information will be kept securely and used only for
+            the First Year / Second Year Initiative. It will not be sold.
+          </p>
+        </div>
         <button type="button" onClick={() => setStatus('idle')}>
           Submit another response
         </button>
