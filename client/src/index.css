@@ -1,0 +1,176 @@
+:root {
+  --color-primary: #ce1126;
+  --color-secondary: #444f51;
+  --color-other: #000000;
+  --color-bg: #f5f5f5;
+  --color-surface: #ffffff;
+  --color-border: #c9cfd1;
+
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  color: var(--color-other);
+  background: var(--color-bg);
+}
+
+body {
+  margin: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: var(--color-surface);
+  border-top: 6px solid var(--color-primary);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+}
+
+.seal {
+  width: 64px;
+  height: 64px;
+}
+
+.hero {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+}
+
+h1 {
+  margin-top: 0;
+  color: var(--color-primary);
+}
+
+.subtitle {
+  margin: -0.75rem 0 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+}
+
+h2 {
+  color: var(--color-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.hint {
+  color: var(--color-secondary);
+  margin-top: 0;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+}
+
+label.checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 400;
+  color: var(--color-other);
+}
+
+fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem 1rem;
+}
+
+legend {
+  font-weight: 600;
+  color: var(--color-secondary);
+  padding: 0 0.4rem;
+}
+
+.survey {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+input[type='checkbox'] {
+  accent-color: var(--color-primary);
+  width: 1rem;
+  height: 1rem;
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input[type='text'],
+input[type='email'],
+input[type='tel'],
+select {
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-other);
+}
+
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+button {
+  padding: 0.7rem 1.1rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: #a80e20;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  color: var(--color-primary);
+  font-weight: 600;
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 1rem;
+    padding: 1.25rem;
+  }
+}
