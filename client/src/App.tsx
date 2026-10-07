@@ -22,14 +22,32 @@ const emptyForm: ResponsePayload = {
 type ListKey = 'fieldsOfInterest' | 'populationInterests' | 'academicTopics' | 'professionalTopics'
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
+interface OtherValue {
+  checked: boolean
+  text: string
+}
+
+const emptyOther: OtherValue = { checked: false, text: '' }
+
 interface CheckboxGroupProps {
   legend: string
   options: string[]
   selected: string[]
   onToggle: (option: string) => void
+  other: OtherValue
+  onToggleOther: () => void
+  onOtherTextChange: (text: string) => void
 }
 
-function CheckboxGroup({ legend, options, selected, onToggle }: CheckboxGroupProps) {
+function CheckboxGroup({
+  legend,
+  options,
+  selected,
+  onToggle,
+  other,
+  onToggleOther,
+  onOtherTextChange,
+}: CheckboxGroupProps) {
   return (
     <fieldset>
       <legend>{legend}</legend>
@@ -43,6 +61,22 @@ function CheckboxGroup({ legend, options, selected, onToggle }: CheckboxGroupPro
           {option}
         </label>
       ))}
+      <div className="other-row">
+        <label className="checkbox">
+          <input type="checkbox" checked={other.checked} onChange={onToggleOther} />
+          Other
+        </label>
+        {other.checked && (
+          <input
+            type="text"
+            className="other-input"
+            placeholder="Please specify"
+            maxLength={100}
+            value={other.text}
+            onChange={(e) => onOtherTextChange(e.target.value)}
+          />
+        )}
+      </div>
     </fieldset>
   )
 }
@@ -62,6 +96,12 @@ function Header() {
 
 export default function App() {
   const [form, setForm] = useState<ResponsePayload>(emptyForm)
+  const [otherValues, setOtherValues] = useState<Record<ListKey, OtherValue>>({
+    fieldsOfInterest: emptyOther,
+    populationInterests: emptyOther,
+    academicTopics: emptyOther,
+    professionalTopics: emptyOther,
+  })
   const [status, setStatus] = useState<Status>('idle')
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -74,14 +114,41 @@ export default function App() {
     }))
   }
 
+  function toggleOther(key: ListKey) {
+    setOtherValues((prev) => ({
+      ...prev,
+      [key]: prev[key].checked ? emptyOther : { checked: true, text: '' },
+    }))
+  }
+
+  function setOtherText(key: ListKey, text: string) {
+    setOtherValues((prev) => ({ ...prev, [key]: { ...prev[key], text } }))
+  }
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setStatus('submitting')
     setErrorMessage('')
+
+    const payload: ResponsePayload = { ...form }
+    for (const key of Object.keys(otherValues) as ListKey[]) {
+      const other = otherValues[key]
+      const text = other.text.trim()
+      if (other.checked && text) {
+        payload[key] = [...payload[key], text]
+      }
+    }
+
     try {
-      await submitResponse(form)
+      await submitResponse(payload)
       setStatus('success')
       setForm(emptyForm)
+      setOtherValues({
+        fieldsOfInterest: emptyOther,
+        populationInterests: emptyOther,
+        academicTopics: emptyOther,
+        professionalTopics: emptyOther,
+      })
     } catch (err) {
       setStatus('error')
       setErrorMessage(err instanceof Error ? err.message : 'Something went wrong.')
@@ -173,6 +240,9 @@ export default function App() {
           options={FIELDS_OF_INTEREST}
           selected={form.fieldsOfInterest}
           onToggle={(o) => toggle('fieldsOfInterest', o)}
+          other={otherValues.fieldsOfInterest}
+          onToggleOther={() => toggleOther('fieldsOfInterest')}
+          onOtherTextChange={(t) => setOtherText('fieldsOfInterest', t)}
         />
 
         <CheckboxGroup
@@ -180,6 +250,9 @@ export default function App() {
           options={POPULATION_INTERESTS}
           selected={form.populationInterests}
           onToggle={(o) => toggle('populationInterests', o)}
+          other={otherValues.populationInterests}
+          onToggleOther={() => toggleOther('populationInterests')}
+          onOtherTextChange={(t) => setOtherText('populationInterests', t)}
         />
 
         <section className="survey">
@@ -191,6 +264,9 @@ export default function App() {
             options={ACADEMIC_TOPICS}
             selected={form.academicTopics}
             onToggle={(o) => toggle('academicTopics', o)}
+            other={otherValues.academicTopics}
+            onToggleOther={() => toggleOther('academicTopics')}
+            onOtherTextChange={(t) => setOtherText('academicTopics', t)}
           />
 
           <CheckboxGroup
@@ -198,6 +274,9 @@ export default function App() {
             options={PROFESSIONAL_TOPICS}
             selected={form.professionalTopics}
             onToggle={(o) => toggle('professionalTopics', o)}
+            other={otherValues.professionalTopics}
+            onToggleOther={() => toggleOther('professionalTopics')}
+            onOtherTextChange={(t) => setOtherText('professionalTopics', t)}
           />
         </section>
 

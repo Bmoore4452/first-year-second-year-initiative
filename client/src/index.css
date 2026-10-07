@@ -108,6 +108,25 @@ legend {
   padding: 0 0.4rem;
 }
 
+.other-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border-top: 1px dashed var(--color-border);
+  padding-top: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.other-input {
+  flex: 1;
+  min-width: 140px;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-other);
+}
+
 .survey {
   display: flex;
   flex-direction: column;
