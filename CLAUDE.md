@@ -46,4 +46,13 @@ Local setup needs `server/.env` (copy `server/.env.example`: `SUPABASE_URL`, `SU
 
 ## Deployment
 
-Client and server deploy as two separate Vercel projects (root dirs `client/` and `server/`). The server's `CORS_ORIGINS` must include the deployed client origin, and the client's `VITE_API_URL` must point at the deployed API at build time. `VITE_BASE` in `vite.config.ts` is a leftover from GitHub Pages hosting and is normally unset.
+Client and server deploy as two separate Vercel projects via the Vercel CLI. Pushing to git does not deploy them. Each subdirectory is linked through its own `.vercel/project.json`:
+
+```bash
+vercel --prod --cwd client   # form + /admin/ dashboard → first-year-second-year-form (https://first-year-second-year-form.vercel.app)
+vercel --prod --cwd server   # API → first-year-second-year-api
+```
+
+Never run `vercel` from the repo root. It isn't linked, so Vercel creates a new project there and the build fails, because the root has no output directory.
+
+The server's `CORS_ORIGINS` must include the deployed client origin, and the client's `VITE_API_URL` must point at the deployed API at build time. `VITE_BASE` in `vite.config.ts` is a leftover from GitHub Pages hosting and is normally unset.
